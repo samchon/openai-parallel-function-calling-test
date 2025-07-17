@@ -2,22 +2,35 @@ import { ILlmApplication } from "@samchon/openapi";
 
 import OpenAI from "openai";
 import { execute } from "./internal/execute";
+import { AutoBePrisma } from "./internal/AutoBePrisma";
+import { IFunctionCallingResult } from "./internal/IFunctionCallingResult";
 
 const task = async (
   api: OpenAI,
   application: ILlmApplication<"chatgpt">,
-  value: number
-): Promise<number> => {
+  systemPrompt: string,
+  analyze: Record<string, string>,
+  targetComponent: AutoBePrisma.IComponent,
+  otherComponents: AutoBePrisma.IComponent[]
+): Promise<IFunctionCallingResult> => {
   const response = await api.chat.completions.create({
     model: "gpt-4.1",
     messages: [
       {
         role: "system",
-        content: "Say English.",
+        content: systemPrompt,
+      },
+      {
+        role: "assistant",
+        content: JSON.stringify({
+          requirementAnalysisReport: analyze,
+          targetComponent,
+          otherComponents,
+        }),
       },
       {
         role: "user",
-        content: `Say the number ${value}`,
+        content: "Do function calling",
       },
       {
         role: "system",
@@ -39,6 +52,6 @@ const task = async (
   const obj = JSON.parse(
     response.choices[0].message.tool_calls![0].function.arguments
   );
-  return obj.value as number;
+  return obj;
 };
-execute("OpenAI API", task).catch(console.error);
+execute(task).catch(console.error);
