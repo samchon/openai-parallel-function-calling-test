@@ -1,0 +1,12 @@
+
+> openai-parallel-function-calling-test@1.0.0 openai D:\github\tests\openai-parallel-function-calling-test
+> ts-node src/openai.ts
+
+Comments Success
+Boards Success
+Engagements Success
+Notifications Success
+Posts Success
+Actors Success
+Moderation Success
+Systematic Success

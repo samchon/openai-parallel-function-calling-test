@@ -49,7 +49,7 @@ const task = async (
     ],
     tool_choice: "required",
   });
-  const obj = JSON.parse(
+  const obj: IFunctionCallingResult = JSON.parse(
     response.choices[0].message.tool_calls![0].function.arguments
   );
   return obj;

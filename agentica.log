@@ -1,0 +1,12 @@
+
+> openai-parallel-function-calling-test@1.0.0 agentica D:\github\tests\openai-parallel-function-calling-test
+> ts-node src/agentica.ts
+
+Actors Success
+Notifications Success
+Engagements Success
+Posts Success
+Comments Success
+Boards Success
+Moderation Success
+Systematic Success

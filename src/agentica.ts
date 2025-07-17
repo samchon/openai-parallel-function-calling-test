@@ -13,7 +13,7 @@ const task = async (
   targetComponent: AutoBePrisma.IComponent,
   otherComponents: AutoBePrisma.IComponent[]
 ): Promise<IFunctionCallingResult> => {
-  let result: IFunctionCallingResult;
+  let result: IFunctionCallingResult = null!;
   const agentica = new MicroAgentica({
     model: "chatgpt",
     vendor: {
@@ -21,9 +21,7 @@ const task = async (
       model: "gpt-4.1",
     },
     config: {
-      executor: {
-        describe: null,
-      },
+      executor: {},
       systemPrompt: {
         common: () => systemPrompt,
         execute: () =>
@@ -48,7 +46,7 @@ const task = async (
         name: "default",
         application,
         execute: {
-          setValue: (v: any): void => {
+          make: (v: any): void => {
             result = v;
           },
         },
@@ -56,9 +54,9 @@ const task = async (
     ],
   });
   agentica.on("request", (req) => {
-    req.body.tool_choice = "required";
+    if (req.body.tools) req.body.tool_choice = "required";
   });
   await agentica.conversate(`Do function calling`);
-  return result!;
+  return result;
 };
 execute(task).catch(console.error);
